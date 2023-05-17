@@ -19,6 +19,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
         title: const Text('New Todo'),
       ),
       body: ListView(
+        padding: const EdgeInsets.all(15),
         children: [
           const Gap(15),
           TextField(
@@ -27,12 +28,15 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
           ),
           TextField(
             controller: description,
+            keyboardType: TextInputType.multiline,
             minLines: 5,
             maxLines: 8,
             decoration: const InputDecoration(
               hintText: 'Description',
             ),
-          )
+          ),
+          const Gap(20),
+          ElevatedButton(onPressed: () {}, child: const Text('Submit'))
         ],
       ),
     );
