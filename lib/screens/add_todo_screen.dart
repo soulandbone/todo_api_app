@@ -9,8 +9,8 @@ class AddTodoScreen extends StatefulWidget {
 }
 
 class _AddTodoScreenState extends State<AddTodoScreen> {
-  final TextEditingController name = TextEditingController();
-  final TextEditingController description = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +24,10 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
           const Gap(15),
           TextField(
             decoration: const InputDecoration(hintText: 'Name'),
-            controller: name,
+            controller: nameController,
           ),
           TextField(
-            controller: description,
+            controller: descriptionController,
             keyboardType: TextInputType.multiline,
             minLines: 5,
             maxLines: 8,
