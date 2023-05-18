@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:http/http.dart' as http;
 
 class AddTodoScreen extends StatefulWidget {
   const AddTodoScreen({super.key});
@@ -11,6 +14,24 @@ class AddTodoScreen extends StatefulWidget {
 class _AddTodoScreenState extends State<AddTodoScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+
+  Future<void> submitForm() async {
+    final name = nameController.text;
+    final description = descriptionController.text;
+    final body = {
+      "title": name,
+      "description": description,
+      "is_completed": false
+    };
+
+    var url = 'https://api.nstack.in/v1/todos';
+    final uri = Uri.parse(url);
+    final response = await http.post(uri,
+        body: jsonEncode(body), headers: {'Content-Type': 'application/json'});
+
+    print(response.body);
+    print(response.statusCode);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +57,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
             ),
           ),
           const Gap(20),
-          ElevatedButton(onPressed: () {}, child: const Text('Submit'))
+          ElevatedButton(onPressed: submitForm, child: const Text('Submit'))
         ],
       ),
     );
