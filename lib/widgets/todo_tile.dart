@@ -22,6 +22,12 @@ class TodoTile extends StatelessWidget {
         ),
         title: Text(name),
         subtitle: Text(description),
+        trailing: PopupMenuButton(
+          itemBuilder: (context) => [
+            const PopupMenuItem(child: Text('Edit')),
+            const PopupMenuItem(child: Text('Delete')),
+          ],
+        ),
       ),
     );
   }
