@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_api/screens/add_todo_screen.dart';
 import 'package:todo_api/services/api_todo.dart';
+import 'package:todo_api/widgets/todo_tile.dart';
 
 class TodosScreen extends StatefulWidget {
   const TodosScreen({super.key});
@@ -40,7 +41,11 @@ class _TodosScreenState extends State<TodosScreen> {
         itemCount: todos.length,
         itemBuilder: (context, index) {
           print('Text of index $index is ${todos[index]['title']}');
-          return Text(todos[index]['title']);
+          return TodoTile(
+            index: (index + 1),
+            name: todos[index]['title'],
+            description: todos[index]['description'],
+          );
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
