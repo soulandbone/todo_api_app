@@ -15,6 +15,14 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
+  void showPOSTresult(String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      backgroundColor: message.contains('failed') ? Colors.red : Colors.grey,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   Future<void> submitForm() async {
     final name = nameController.text;
     final description = descriptionController.text;
@@ -29,8 +37,16 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
     final response = await http.post(uri,
         body: jsonEncode(body), headers: {'Content-Type': 'application/json'});
 
-    print(response.body);
-    print(response.statusCode);
+    if (response.statusCode == 201) {
+      nameController.text = '';
+      descriptionController.text = '';
+
+      showPOSTresult('The task creation was succesful');
+    } else {
+      showPOSTresult('The task creation has failed');
+    }
+
+    print('this has been called now');
   }
 
   @override
