@@ -18,9 +18,24 @@ class _TodosScreenState extends State<TodosScreen> {
     setState(() {
       todos = response;
     });
+  }
 
-    print('The list of todos is $todos');
-    print('The length of todos is ${todos.length}');
+  deleteByID(String id) async {
+    final isSuccess = await TodoApi.deletebyId(id);
+
+    if (isSuccess) {
+      setState(() {
+        todos.removeWhere((element) => element['_id'] == id);
+      });
+    } else {
+      print('an error has occurred during deletion');
+    }
+  }
+
+  Future<void> onRefresh() async {
+    setState(() {
+      fetchInfo();
+    });
   }
 
   @override
@@ -33,24 +48,29 @@ class _TodosScreenState extends State<TodosScreen> {
   @override
   Widget build(BuildContext context) {
     print('Build method is called');
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Todos'),
-      ),
-      body: ListView.builder(
-        itemCount: todos.length,
-        itemBuilder: (context, index) {
-          print('Text of index $index is ${todos[index]['title']}');
-          return TodoTile(
-            index: (index + 1),
-            name: todos[index]['title'],
-            description: todos[index]['description'],
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: navigateToAdd,
-        label: const Text('Add Todo'),
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('My Todos'),
+        ),
+        body: ListView.builder(
+          itemCount: todos.length,
+          itemBuilder: (context, index) {
+            print('Text of index $index is ${todos[index]['title']}');
+            return TodoTile(
+              deleteById: deleteByID,
+              id: todos[index]['_id'],
+              index: (index + 1),
+              name: todos[index]['title'],
+              description: todos[index]['description'],
+            );
+          },
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: navigateToAdd,
+          label: const Text('Add Todo'),
+        ),
       ),
     );
   }

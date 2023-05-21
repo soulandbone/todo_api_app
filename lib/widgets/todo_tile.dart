@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 
 class TodoTile extends StatelessWidget {
+  final String id;
   final int index;
   final String name;
   final String description;
+  final Function(String) deleteById;
 
   const TodoTile(
-      {required this.index,
+      {required this.id,
+      required this.index,
       required this.name,
       required this.description,
+      required this.deleteById,
       super.key});
 
   @override
@@ -23,9 +27,22 @@ class TodoTile extends StatelessWidget {
         title: Text(name),
         subtitle: Text(description),
         trailing: PopupMenuButton(
+          onSelected: (value) {
+            if (value == 'delete') {
+              deleteById(id);
+            } else if (value == 'edit') {
+// go to edit page to edit, make changes and update.
+            }
+          },
           itemBuilder: (context) => [
-            const PopupMenuItem(child: Text('Edit')),
-            const PopupMenuItem(child: Text('Delete')),
+            const PopupMenuItem(
+              value: 'edit',
+              child: Text('Edit'),
+            ),
+            const PopupMenuItem(
+              value: 'delete',
+              child: Text('Delete'),
+            ),
           ],
         ),
       ),
