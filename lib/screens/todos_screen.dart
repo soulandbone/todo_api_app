@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_api/helpers/snackbar_helper.dart';
 import 'package:todo_api/screens/add_todo_screen.dart';
 import 'package:todo_api/services/api_todo.dart';
 import 'package:todo_api/widgets/todo_tile.dart';
@@ -13,29 +14,44 @@ class TodosScreen extends StatefulWidget {
 class _TodosScreenState extends State<TodosScreen> {
   List<dynamic> todos = [];
 
-  fetchInfo() async {
+  Future<void> fetchInfo() async {
     final response = await TodoApi.fetchTodos();
     setState(() {
       todos = response;
     });
   }
 
-  deleteByID(String id) async {
+  Future<void> deleteByID(String id) async {
     final isSuccess = await TodoApi.deletebyId(id);
 
     if (isSuccess) {
       setState(() {
         todos.removeWhere((element) => element['_id'] == id);
+        showSnackbarMessage(context,
+            message: 'The entry has been deleted succesfully');
       });
-    } else {
-      print('an error has occurred during deletion');
-    }
+    } else {}
   }
 
   Future<void> onRefresh() async {
     setState(() {
       fetchInfo();
     });
+  }
+
+  void navigateToAdd() {
+    final route =
+        MaterialPageRoute(builder: (context) => const AddTodoScreen());
+    Navigator.push(context, route);
+  }
+
+  void navigateToEdit() {
+    print('navigate to edit executes');
+    final route = MaterialPageRoute(
+        builder: (context) => const AddTodoScreen(
+              isEdit: true,
+            ));
+    Navigator.push(context, route);
   }
 
   @override
@@ -47,7 +63,7 @@ class _TodosScreenState extends State<TodosScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('Build method is called');
+    //print('Build method is called');
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: Scaffold(
@@ -57,9 +73,10 @@ class _TodosScreenState extends State<TodosScreen> {
         body: ListView.builder(
           itemCount: todos.length,
           itemBuilder: (context, index) {
-            print('Text of index $index is ${todos[index]['title']}');
+            //print('Text of index $index is ${todos[index]['title']}');
             return TodoTile(
               deleteById: deleteByID,
+              navigateToEdit: navigateToEdit,
               id: todos[index]['_id'],
               index: (index + 1),
               name: todos[index]['title'],
@@ -73,11 +90,5 @@ class _TodosScreenState extends State<TodosScreen> {
         ),
       ),
     );
-  }
-
-  void navigateToAdd() {
-    final route =
-        MaterialPageRoute(builder: (context) => const AddTodoScreen());
-    Navigator.push(context, route);
   }
 }

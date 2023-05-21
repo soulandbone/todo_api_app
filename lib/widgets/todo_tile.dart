@@ -6,6 +6,7 @@ class TodoTile extends StatelessWidget {
   final String name;
   final String description;
   final Function(String) deleteById;
+  final Function navigateToEdit;
 
   const TodoTile(
       {required this.id,
@@ -13,6 +14,7 @@ class TodoTile extends StatelessWidget {
       required this.name,
       required this.description,
       required this.deleteById,
+      required this.navigateToEdit,
       super.key});
 
   @override
@@ -31,7 +33,7 @@ class TodoTile extends StatelessWidget {
             if (value == 'delete') {
               deleteById(id);
             } else if (value == 'edit') {
-// go to edit page to edit, make changes and update.
+              navigateToEdit();
             }
           },
           itemBuilder: (context) => [
