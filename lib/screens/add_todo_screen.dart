@@ -40,15 +40,34 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
       "is_completed": false
     };
 
-    var url = 'https://api.nstack.in/v1/todos';
-    final uri = Uri.parse(url);
-    final response = await http.post(uri,
-        body: jsonEncode(body), headers: {'Content-Type': 'application/json'});
+    if (widget.isEdit) {
+      final id = widget.todo!['_id'];
+      print(widget.todo!['_id']);
+      var url = 'https://api.nstack.in/v1/todos/$id';
+      final uri = Uri.parse(url);
+      final response = await http.put(uri,
+          body: jsonEncode(body),
+          headers: {'Content-Type': 'application/json'});
 
-    if (response.statusCode == 201) {
-      nameController.text = '';
-      descriptionController.text = '';
-    } else {}
+      if (response.statusCode == 201) {
+        nameController.text = '';
+        descriptionController.text = '';
+      } else {
+        print(response.statusCode);
+        print(response.body);
+      }
+    } else {
+      var url = 'https://api.nstack.in/v1/todos/';
+      final uri = Uri.parse(url);
+      final response = await http.post(uri,
+          body: jsonEncode(body),
+          headers: {'Content-Type': 'application/json'});
+
+      if (response.statusCode == 201) {
+        nameController.text = '';
+        descriptionController.text = '';
+      } else {}
+    }
   }
 
   @override
