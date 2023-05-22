@@ -6,8 +6,9 @@ import 'package:http/http.dart' as http;
 
 class AddTodoScreen extends StatefulWidget {
   final bool isEdit;
+  final Map? todo;
 
-  const AddTodoScreen({this.isEdit = false, super.key});
+  const AddTodoScreen({this.isEdit = false, this.todo, super.key});
 
   @override
   State<AddTodoScreen> createState() => _AddTodoScreenState();
@@ -16,6 +17,19 @@ class AddTodoScreen extends StatefulWidget {
 class _AddTodoScreenState extends State<AddTodoScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+
+  @override
+  void initState() {
+    if (widget.todo != null) {
+      print('widget.todo is ${widget.todo}');
+      setState(() {
+        nameController.text = widget.todo!['title'];
+        descriptionController.text = widget.todo!['description'];
+      });
+    }
+
+    super.initState();
+  }
 
   Future<void> submitForm() async {
     final name = nameController.text;
@@ -61,7 +75,11 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
             ),
           ),
           const Gap(20),
-          ElevatedButton(onPressed: submitForm, child: const Text('Submit'))
+          ElevatedButton(
+              onPressed: submitForm,
+              child: widget.isEdit
+                  ? const Text("Edit Task")
+                  : const Text('Submit'))
         ],
       ),
     );

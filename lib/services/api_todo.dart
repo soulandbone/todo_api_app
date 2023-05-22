@@ -21,4 +21,16 @@ class TodoApi {
 
     return (response.statusCode == 200);
   }
+
+  // static Future<Map> fetchTodo(String id) async {
+  //   // to get the info for just one toDO
+  //   var url = 'https://api.nstack.in/v1/todos/$id';
+  //   final uri = Uri.parse(url);
+  //   final response = await http.get(uri);
+  //   final json = jsonDecode(response.body);
+
+  //   print('this is the Item Info : $json');
+
+  //   return json;
+  // }
 }

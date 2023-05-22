@@ -33,7 +33,7 @@ class TodoTile extends StatelessWidget {
             if (value == 'delete') {
               deleteById(id);
             } else if (value == 'edit') {
-              navigateToEdit();
+              navigateToEdit(id);
             }
           },
           itemBuilder: (context) => [

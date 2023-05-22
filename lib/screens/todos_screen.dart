@@ -45,10 +45,11 @@ class _TodosScreenState extends State<TodosScreen> {
     Navigator.push(context, route);
   }
 
-  void navigateToEdit() {
-    print('navigate to edit executes');
+  void navigateToEdit(String id) {
+    final map = todos.firstWhere((element) => id == element['_id']);
     final route = MaterialPageRoute(
-        builder: (context) => const AddTodoScreen(
+        builder: (context) => AddTodoScreen(
+              todo: map,
               isEdit: true,
             ));
     Navigator.push(context, route);
