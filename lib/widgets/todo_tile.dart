@@ -5,7 +5,7 @@ class TodoTile extends StatelessWidget {
   final int index;
   final String name;
   final String description;
-  final Function(String) deleteById;
+  final Function deleteById; // final Function(String) deleteById;
   final Function navigateToEdit;
 
   const TodoTile(

@@ -3,15 +3,18 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class TodoApi {
-  static Future<List<dynamic>> fetchTodos() async {
+  static Future<List?> fetchTodos() async {
     var url = 'https://api.nstack.in/v1/todos';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
-    final json = jsonDecode(response.body);
 
-    print('this is the Json : $json');
-
-    return json['items'];
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      final result = json['items'];
+      return result;
+    } else {
+      return null;
+    }
   }
 
   static Future<bool> deletebyId(String id) async {
@@ -22,15 +25,7 @@ class TodoApi {
     return (response.statusCode == 200);
   }
 
-  // static Future<Map> fetchTodo(String id) async {
-  //   // to get the info for just one toDO
-  //   var url = 'https://api.nstack.in/v1/todos/$id';
-  //   final uri = Uri.parse(url);
-  //   final response = await http.get(uri);
-  //   final json = jsonDecode(response.body);
+  static Future<void> updateTodo() async {}
 
-  //   print('this is the Item Info : $json');
-
-  //   return json;
-  // }
+  static Future<void> addTodo() async {}
 }

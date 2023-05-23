@@ -16,9 +16,16 @@ class _TodosScreenState extends State<TodosScreen> {
 
   Future<void> fetchInfo() async {
     final response = await TodoApi.fetchTodos();
-    setState(() {
-      todos = response;
-    });
+
+    if (response != null) {
+      setState(() {
+        todos = response;
+      });
+    } else {
+      if (context.mounted) {
+        showSnackbarMessage(context, message: 'There was an error');
+      }
+    }
   }
 
   Future<void> deleteByID(String id) async {

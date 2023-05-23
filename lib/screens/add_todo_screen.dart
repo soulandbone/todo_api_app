@@ -74,7 +74,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: isEdit ? const Text('Edit Todo') : const Text('Add Todo'),
+        title: Text(isEdit ? 'Edit Todo' : 'Add Todo'),
       ),
       body: ListView(
         padding: const EdgeInsets.all(15),
@@ -95,8 +95,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
           ),
           const Gap(20),
           ElevatedButton(
-              onPressed: submitForm,
-              child: isEdit ? const Text("Edit Task") : const Text('Submit'))
+              onPressed: submitForm, child: Text(isEdit ? 'Update' : 'Submit'))
         ],
       ),
     );
