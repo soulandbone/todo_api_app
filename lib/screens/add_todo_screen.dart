@@ -5,10 +5,9 @@ import 'package:gap/gap.dart';
 import 'package:http/http.dart' as http;
 
 class AddTodoScreen extends StatefulWidget {
-  final bool isEdit;
   final Map? todo;
 
-  const AddTodoScreen({this.isEdit = false, this.todo, super.key});
+  const AddTodoScreen({this.todo, super.key});
 
   @override
   State<AddTodoScreen> createState() => _AddTodoScreenState();
@@ -17,11 +16,12 @@ class AddTodoScreen extends StatefulWidget {
 class _AddTodoScreenState extends State<AddTodoScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  bool isEdit = false;
 
   @override
   void initState() {
     if (widget.todo != null) {
-      print('widget.todo is ${widget.todo}');
+      isEdit = true;
       setState(() {
         nameController.text = widget.todo!['title'];
         descriptionController.text = widget.todo!['description'];
@@ -40,16 +40,16 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
       "is_completed": false
     };
 
-    if (widget.isEdit) {
+    if (isEdit) {
       final id = widget.todo!['_id'];
-      print(widget.todo!['_id']);
+
       var url = 'https://api.nstack.in/v1/todos/$id';
       final uri = Uri.parse(url);
       final response = await http.put(uri,
           body: jsonEncode(body),
           headers: {'Content-Type': 'application/json'});
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         nameController.text = '';
         descriptionController.text = '';
       } else {
@@ -74,7 +74,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: widget.isEdit ? const Text('Edit Todo') : const Text('Add Todo'),
+        title: isEdit ? const Text('Edit Todo') : const Text('Add Todo'),
       ),
       body: ListView(
         padding: const EdgeInsets.all(15),
@@ -96,9 +96,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
           const Gap(20),
           ElevatedButton(
               onPressed: submitForm,
-              child: widget.isEdit
-                  ? const Text("Edit Task")
-                  : const Text('Submit'))
+              child: isEdit ? const Text("Edit Task") : const Text('Submit'))
         ],
       ),
     );

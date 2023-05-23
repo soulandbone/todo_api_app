@@ -33,26 +33,31 @@ class _TodosScreenState extends State<TodosScreen> {
     } else {}
   }
 
-  Future<void> onRefresh() async {
+  // Future<void> onRefresh() async {
+  //   setState(() {
+  //     fetchInfo();
+  //   });
+  // }
+
+  Future<void> navigateToAdd() async {
+    final route =
+        MaterialPageRoute(builder: (context) => const AddTodoScreen());
+    await Navigator.push(context, route);
     setState(() {
       fetchInfo();
     });
   }
 
-  void navigateToAdd() {
-    final route =
-        MaterialPageRoute(builder: (context) => const AddTodoScreen());
-    Navigator.push(context, route);
-  }
-
-  void navigateToEdit(String id) {
+  Future<void> navigateToEdit(String id) async {
     final map = todos.firstWhere((element) => id == element['_id']);
     final route = MaterialPageRoute(
         builder: (context) => AddTodoScreen(
               todo: map,
-              isEdit: true,
             ));
-    Navigator.push(context, route);
+    await Navigator.push(context, route);
+    setState(() {
+      fetchInfo();
+    });
   }
 
   @override
@@ -65,30 +70,32 @@ class _TodosScreenState extends State<TodosScreen> {
   @override
   Widget build(BuildContext context) {
     //print('Build method is called');
-    return RefreshIndicator(
-      onRefresh: onRefresh,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('My Todos'),
-        ),
-        body: ListView.builder(
-          itemCount: todos.length,
-          itemBuilder: (context, index) {
-            //print('Text of index $index is ${todos[index]['title']}');
-            return TodoTile(
-              deleteById: deleteByID,
-              navigateToEdit: navigateToEdit,
-              id: todos[index]['_id'],
-              index: (index + 1),
-              name: todos[index]['title'],
-              description: todos[index]['description'],
-            );
-          },
-        ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: navigateToAdd,
-          label: const Text('Add Todo'),
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Todos'),
+      ),
+      body: RefreshIndicator(
+        onRefresh: fetchInfo,
+        child: todos.isEmpty
+            ? const Center(child: Text('its empty'))
+            : ListView.builder(
+                itemCount: todos.length,
+                itemBuilder: (context, index) {
+                  //print('Text of index $index is ${todos[index]['title']}');
+                  return TodoTile(
+                    deleteById: deleteByID,
+                    navigateToEdit: navigateToEdit,
+                    id: todos[index]['_id'],
+                    index: (index + 1),
+                    name: todos[index]['title'],
+                    description: todos[index]['description'],
+                  );
+                },
+              ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: navigateToAdd,
+        label: const Text('Add Todo'),
       ),
     );
   }
