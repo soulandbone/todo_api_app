@@ -29,7 +29,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
     super.initState();
   }
 
-  Future<void> submitForm() async {
+  Future<void> updateForm() async {
     final name = nameController.text;
     final description = descriptionController.text;
     final body = {
@@ -46,7 +46,23 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
     } else {}
   }
 
-  Future<void> editForm() async {}
+  Future<void> submitForm() async {
+    final name = nameController.text;
+    final description = descriptionController.text;
+
+    final body = {
+      "title": name,
+      "description": description,
+      "is_completed": false
+    };
+
+    final isSuccess = await TodoApi.addTodo(body);
+
+    if (isSuccess) {
+      nameController.text = '';
+      descriptionController.text = '';
+    } else {}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +89,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
           ),
           const Gap(20),
           ElevatedButton(
-              onPressed: isEdit ? submitForm : null,
+              onPressed: isEdit ? updateForm : submitForm,
               child: Text(isEdit ? 'Update' : 'Submit'))
         ],
       ),
