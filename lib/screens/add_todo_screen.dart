@@ -1,8 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:http/http.dart' as http;
+import 'package:todo_api/services/api_todo.dart';
 
 class AddTodoScreen extends StatefulWidget {
   final Map? todo;
@@ -39,36 +37,16 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
       "description": description,
       "is_completed": false
     };
+    final id = widget.todo!['_id'];
+    final isSuccess = await TodoApi.updateTodo(id, body);
 
-    if (isEdit) {
-      final id = widget.todo!['_id'];
-
-      var url = 'https://api.nstack.in/v1/todos/$id';
-      final uri = Uri.parse(url);
-      final response = await http.put(uri,
-          body: jsonEncode(body),
-          headers: {'Content-Type': 'application/json'});
-
-      if (response.statusCode == 200) {
-        nameController.text = '';
-        descriptionController.text = '';
-      } else {
-        print(response.statusCode);
-        print(response.body);
-      }
-    } else {
-      var url = 'https://api.nstack.in/v1/todos/';
-      final uri = Uri.parse(url);
-      final response = await http.post(uri,
-          body: jsonEncode(body),
-          headers: {'Content-Type': 'application/json'});
-
-      if (response.statusCode == 201) {
-        nameController.text = '';
-        descriptionController.text = '';
-      } else {}
-    }
+    if (isSuccess) {
+      nameController.text = '';
+      descriptionController.text = '';
+    } else {}
   }
+
+  Future<void> editForm() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +73,8 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
           ),
           const Gap(20),
           ElevatedButton(
-              onPressed: submitForm, child: Text(isEdit ? 'Update' : 'Submit'))
+              onPressed: isEdit ? submitForm : null,
+              child: Text(isEdit ? 'Update' : 'Submit'))
         ],
       ),
     );
