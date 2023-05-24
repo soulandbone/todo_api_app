@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:todo_api/helpers/snackbar_helper.dart';
 import 'package:todo_api/services/api_todo.dart';
 
 class AddTodoScreen extends StatefulWidget {
@@ -41,9 +42,18 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
     final isSuccess = await TodoApi.updateTodo(id, body);
 
     if (isSuccess) {
+      if (context.mounted) {
+        showSnackbarMessage(context,
+            message: 'The entry has been succesfully updated');
+      }
+
       nameController.text = '';
       descriptionController.text = '';
-    } else {}
+    } else {
+      if (context.mounted) {
+        showSnackbarMessage(context, message: 'The entry update has failed');
+      }
+    }
   }
 
   Future<void> submitForm() async {
@@ -59,9 +69,18 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
     final isSuccess = await TodoApi.addTodo(body);
 
     if (isSuccess) {
+      if (context.mounted) {
+        showSnackbarMessage(context,
+            message: 'The entry has been succesfully added');
+      }
+
       nameController.text = '';
       descriptionController.text = '';
-    } else {}
+    } else {
+      if (context.mounted) {
+        showSnackbarMessage(context, message: 'The entry addition has failed');
+      }
+    }
   }
 
   @override

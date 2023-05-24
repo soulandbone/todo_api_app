@@ -16,14 +16,14 @@ class _TodosScreenState extends State<TodosScreen> {
 
   Future<void> fetchInfo() async {
     final response = await TodoApi.fetchTodos();
-
     if (response != null) {
       setState(() {
         todos = response;
       });
     } else {
       if (context.mounted) {
-        showSnackbarMessage(context, message: 'There was an error');
+        showSnackbarMessage(context,
+            message: 'There was an error retrieving the tasks');
       }
     }
   }
@@ -37,14 +37,12 @@ class _TodosScreenState extends State<TodosScreen> {
         showSnackbarMessage(context,
             message: 'The entry has been deleted succesfully');
       });
-    } else {}
+    } else {
+      if (context.mounted) {
+        showSnackbarMessage(context, message: 'The deletion has failed');
+      }
+    }
   }
-
-  // Future<void> onRefresh() async {
-  //   setState(() {
-  //     fetchInfo();
-  //   });
-  // }
 
   Future<void> navigateToAdd() async {
     final route =
