@@ -82,7 +82,12 @@ class _TodosScreenState extends State<TodosScreen> {
       body: RefreshIndicator(
         onRefresh: fetchInfo,
         child: todos.isEmpty
-            ? const Center(child: Text('its empty'))
+            ? const Center(
+                child: Text(
+                'The List is empty, please add some tasks',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 32),
+              ))
             : ListView.builder(
                 itemCount: todos.length,
                 itemBuilder: (context, index) {
